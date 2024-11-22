@@ -126,5 +126,61 @@
         // Carrega o estado dos checkboxes ao iniciar
         loadCheckboxState();
     </script>
+    <script>
+        const SERVER_URL = '/api/checkboxes'; // URL da função da API
+    
+        // Função para carregar o estado dos checkboxes
+        function loadCheckboxState() {
+            fetch(SERVER_URL)
+                .then(response => response.json())
+                .then(data => {
+                    const checkboxes = Object.keys(data);
+                    checkboxes.forEach(id => {
+                        const checkbox = document.getElementById(id);
+                        checkbox.checked = data[id]; // Carrega o estado do JSON
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar estado dos checkboxes:', error);
+                });
+        }
+    
+        // Função para salvar o estado dos checkboxes
+        function saveCheckboxState(event) {
+            const checkboxId = event.target.id;
+            const newState = {
+                ...Object.fromEntries(new FormData(document.querySelector('form'))),
+                [checkboxId]: event.target.checked
+            };
+    
+            fetch(SERVER_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newState),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao atualizar estado');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Estado atualizado:', data);
+            })
+            .catch(error => {
+                console.error('Erro ao atualizar estado:', error);
+            });
+        }
+    
+        // Adiciona os ouvintes de eventos para os checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', saveCheckboxState);
+        });
+    
+        // Carrega o estado dos checkboxes ao iniciar
+        loadCheckboxState();
+    </script>
 </body>
 </html>
