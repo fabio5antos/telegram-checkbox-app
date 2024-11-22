@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const filePath = path.join(__dirname, 'checkboxes.json');
+const filePath = path.join(__dirname, '../data/checkboxes.json'); // Atualize o caminho
 
 export default function handler(req, res) {
     if (req.method === 'GET') {
