@@ -1,8 +1,8 @@
 {
-    "ouvidoriaCheckbox1": false,
-    "ouvidoriaCheckbox2": false,
-    "ouvidoriaCheckbox3": false,
-    "eSicCheckbox1": false,
-    "eSicCheckbox2": false,
-    "eSicCheckbox3": false
+    "ouvidoriaCheckbox1": true,
+    "ouvidoriaCheckbox2": true,
+    "ouvidoriaCheckbox3": true,
+    "eSicCheckbox1": true,
+    "eSicCheckbox2": true,
+    "eSicCheckbox3": true
 }
