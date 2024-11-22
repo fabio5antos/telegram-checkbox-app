@@ -60,7 +60,7 @@
     <script>
         const TELEGRAM_BOT_TOKEN = 'AAHDBYEtzk0w0pR63FXvdCl1bofX_Hlm0nc'; // Substitua pelo seu token
         const CHAT_ID = '311353358'; // Substitua pelo ID do chat
-        const SERVER_URL = 'http://localhost:3000/send-message'; // URL do seu servidor proxy
+        const SERVER_URL = '/api/send-message'; // URL do seu servidor proxy
 
         // Função para carregar o estado dos checkboxes
         function loadCheckboxState() {
@@ -75,21 +75,21 @@
 
             checkboxes.forEach(id => {
                 const checkbox = document.getElementById(id);
-                checkbox.checked = JSON.parse(localStorage.getItem(id)) || false;
+                checkbox.checked = JSON.parse(localStorage.getItem(id)) || false; // Carrega o estado do localStorage
             });
         }
 
         // Função para salvar o estado dos checkboxes e enviar mensagem
         function saveCheckboxState(event) {
             const checkboxId = event.target.id;
-            localStorage.setItem(checkboxId, event.target.checked);
+            localStorage.set Item(checkboxId, event.target.checked); // Salva o estado no localStorage
             const taskName = event.target.nextElementSibling.innerText;
             const message = `A tarefa "${taskName}" foi ${event.target.checked ? 'concluída' : 'desmarcada'}.`;
 
             sendTelegramMessage(message);
         }
 
- // Função para enviar mensagem para o servidor proxy
+        // Função para enviar mensagem para o servidor proxy
         function sendTelegramMessage(message) {
             const data = {
                 token: TELEGRAM_BOT_TOKEN,
