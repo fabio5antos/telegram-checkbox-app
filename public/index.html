@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alterações nos Sistemas V1.4</title>
+    <title>Alterações nos Sistemas V1.5</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 p-6">
-    <h1 class="text-2xl font-bold mb-4">Alterações nos Sistemas V1.4</h1>
+    <h1 class="text-2xl font-bold mb-4">Alterações nos Sistemas V1.5</h1>
     
     <form id="checkboxForm"> <!-- Adicionado o formulário -->
         <div class="bg-white p-4 rounded shadow">
@@ -75,21 +75,24 @@
                 })
                 .catch(error => {
                     console.error('Erro ao carregar estado dos checkboxes:', error);
-                });
+ });
         }
 
         // Função para salvar o estado dos checkboxes
         function saveCheckboxState(event) {
-            const checkboxId = event.target.id;
-            const form = document.getElementById('checkboxForm'); // Encontre o formulário
-            const formData = new FormData(form); // Crie um objeto FormData a partir do formulário
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const state = {};
 
-            // Adicione o estado do checkbox ao objeto FormData
-            formData.append(checkboxId, event.target.checked);
+            checkboxes.forEach(checkbox => {
+                state[checkbox.id] = checkbox.checked; // Cria um objeto com o estado dos checkboxes
+            });
 
             fetch(SERVER_URL, {
                 method: 'POST',
-                body: formData, // Envie o objeto FormData para o servidor
+                headers: {
+                    'Content-Type': 'application/json', // Define o tipo de conteúdo como JSON
+                },
+                body: JSON.stringify(state), // Envia o objeto como JSON
             })
             .then(response => {
                 if (!response.ok) {
