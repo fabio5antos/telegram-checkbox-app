@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alterações nos Sistemas</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+    <h1 class="text-2xl font-bold mb-4">Alterações nos Sistemas</h1>
+    
+    <div class="bg-white p-4 rounded shadow">
+        <h2 class="text-xl font-semibold">Sistema: Ouvidoria</h2>
+        <ul class="list-disc pl-5">
+            <li>
+                <label class="flex items-center mt-2">
+                    <input type="checkbox" id="ouvidoriaCheckbox1" class="form-checkbox h-5 w-5 text-blue-600" />
+                    <span class="ml-2">Alteração 1</span>
+                </label>
+            </li>
+            <li>
+                <label class="flex items-center mt-2">
+                    <input type="checkbox" id="ouvidoriaCheckbox2" class="form-checkbox h-5 w-5 text-blue-600" />
+                    <span class="ml-2">Alteração 2</span>
+                </label>
+            </li>
+            <li>
+                <label class="flex items-center mt-2">
+                    <input type="checkbox" id="ouvidoriaCheckbox3" class="form-checkbox h-5 w-5 text-blue-600" />
+                    <span class="ml-2">Alteração 3</span>
+                </label>
+            </li>
+        </ul>
+    </div>
+
+    <div class="bg-white p-4 rounded shadow mt-4">
+        <h2 class="text-xl font-semibold">Sistema: E-Sic</h2>
+        <ul class="list-disc pl-5">
+            <li>
+                <label class="flex items-center mt-2">
+                    <input type="checkbox" id="eSicCheckbox1" class="form-checkbox h-5 w-5 text-blue-600" />
+                    <span class="ml-2">Alteração 1</span>
+                </label>
+            </li>
+            <li>
+                <label class="flex items-center mt-2">
+                    <input type="checkbox" id="eSicCheckbox2" class="form-checkbox h-5 w-5 text-blue-600" />
+                    <span class="ml-2">Alteração 2</span>
+                </label>
+            </li>
+            <li>
+                <label class="flex items-center mt-2">
+                    <input type="checkbox" id="eSicCheckbox3" class="form-checkbox h-5 w-5 text-blue-600" />
+                    <span class="ml-2">Alteração 3</span>
+                </label>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        const TELEGRAM_BOT_TOKEN = 'AAHDBYEtzk0w0pR63FXvdCl1bofX_Hlm0nc'; // Substitua pelo seu token
+        const CHAT_ID = '311353358'; // Substitua pelo ID do chat
+        const SERVER_URL = 'http://localhost:3000/send-message'; // URL do seu servidor proxy
+
+        // Função para carregar o estado dos checkboxes
+        function loadCheckboxState() {
+            const checkboxes = [
+                'ouvidoriaCheckbox1',
+                'ouvidoriaCheckbox2',
+                'ouvidoriaCheckbox3',
+                'eSicCheckbox1',
+                'eSicCheckbox2',
+                'eSicCheckbox3',
+            ];
+
+            checkboxes.forEach(id => {
+                const checkbox = document.getElementById(id);
+                checkbox.checked = JSON.parse(localStorage.getItem(id)) || false;
+            });
+        }
+
+        // Função para salvar o estado dos checkboxes e enviar mensagem
+        function saveCheckboxState(event) {
+            const checkboxId = event.target.id;
+            localStorage.setItem(checkboxId, event.target.checked);
+            const taskName = event.target.nextElementSibling.innerText;
+            const message = `A tarefa "${taskName}" foi ${event.target.checked ? 'concluída' : 'desmarcada'}.`;
+
+            sendTelegramMessage(message);
+        }
+
+ // Função para enviar mensagem para o servidor proxy
+        function sendTelegramMessage(message) {
+            const data = {
+                token: TELEGRAM_BOT_TOKEN,
+                chatId: CHAT_ID,
+                message: message,
+            };
+
+            fetch(SERVER_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro na resposta da rede');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Mensagem enviada:', data);
+            })
+            .catch(error => {
+                console.error('Erro ao enviar mensagem:', error);
+            });
+        }
+
+        // Adiciona os ouvintes de eventos para os checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', saveCheckboxState);
+        });
+
+        // Carrega o estado dos checkboxes ao iniciar
+        loadCheckboxState();
+    </script>
+</body>
+</html>
